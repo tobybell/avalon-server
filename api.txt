@@ -1,0 +1,165 @@
+Get web app     GET  /
+
+# Create a game
+---------------
+POST /games
+
+## Parameters
+ - Int knights // Number of knights in the game
+ - Int minions // Number of minions in the game
+ - [String]? specials // Special characters to use. Default ['Merlin'].
+
+Specials can be: Merlin, Morgana, Percival, Mordred, Oberon. Percival and
+Morgana are mutually inclusive. Specifying only one of them is legal, but it
+implies the other.
+
+## Response
+{
+    success: --,
+    error: --,
+    game: {
+        ID: "Z36VAQ",
+        status: "open",
+        config: {
+            knights: 4,
+            minions: 4,
+            specials: [
+                "Merlin", "Morgana", "Percival"
+            ]
+        }
+    }
+}
+
+# Join a game
+-------------
+POST /games/:gameID
+
+## Parameters
+ - String playerName // Name of the player.
+
+## Response
+{
+    success: --,
+    error: --,
+    game: {
+        ID: "Z36VAQ",
+        status: "open",
+        self: {
+            ID: "3jf0wnfji2k28r9hued"
+        }
+        config: {
+            knights: 4,
+            minions: 4,
+            specials: [
+                "Merlin", "Morgana", "Percival"
+            ]
+        }
+    }
+}
+
+# Get a game
+GET /games/:gameID
+
+## Parameters
+ - String playerID // ID of the client player.
+
+This endpoint will return all relevant info (for the given player) about the requested game. Game statuses can be any of the following:
+    - "open": not yet started, not all players have joined.
+    - "idle": the game is active, but no mission has been proposed.
+    - "raised": a mission has been proposed, but not yet approved or rejected.
+    - "locked": mission approved, awaiting execution from members.
+    - "closed": game has ended.
+
+## Response
+{
+    success: --,
+    error: --,
+    game: {
+        ID: "Z36VAQ",
+        status: "raised",
+        self: {
+            ID: "3jf0wnfji2k28r9hued",
+            role: [ /* player roles */ ]
+        }
+        mission: {
+            players:
+            status: 'waiting'
+        }
+        players: [ /* players */ ]
+        config: {
+            knights: 4,
+            minions: 4,
+            specials: [
+                "Merlin", "Morgana", "Percival"
+            ]
+        }
+    }
+}
+
+## Subsets
+
+GET /games/:gameID/ID
+GET /games/:gameID/config
+GET /games/:gameID/players
+GET /games/:gameID/self
+GET /games/:gameID/status
+
+# Look up the current mission
+GET /games/:gameID/mission
+
+# Objects
+
+## Mission object
+
+If no mission has been proposed (start of the game)
+
+The `players` field will be an array containing the names of the proposed players.
+
+mission: {
+    players: ["Tobin", "Ben", "Noah"],
+    status: "approved",
+    upVotes: 4,
+    downVotes: 3
+}
+
+# Suggest mission
+POST /games/:gameID/mission
+(playerID, playerIDs) -> S/E
+
+# Inspect current mission
+GET /games/:gameID/mission
+(playerID) -> S/E, playerIDs, status
+
+# Vote on proposed mission
+POST /games/:gameID/mission
+(playerID, vote=accept/reject) -> S/E
+
+# Execute a mission you are a part of
+POST /games/:gameID/mission
+
+GET /games/:gameID/
+
+{
+    success: true/false,
+    error: ""/undefined,
+    game: {
+        ID: "FD5A09",
+        history: [
+            { event: "creation": config: { /* configuration object */ } },
+            { event: "join", player: "Noah" },
+            { event: "join", player: "Tobin" },
+            { event: "join", player: "Ben" },
+            { event: "join", player: "Casey" },
+            { event: "join", player: "Delaney" },
+            { event: "join", player: "Roger" },
+            { event: "start" },
+            { event: "turn", player: "Roger" },
+            { event: "proposal", mission: ["Noah", "Ben", "Tobin"] },
+            { event: "approval/rejection", yes: ["Noah", "Casey", "Delaney"], no: ["Tobin", "Ben", "Roger"] },
+            { event: "pass/fail", passes: 3, fails: 0 },
+            { event: "turn", player: "Noah" }
+            ...
+            { event: "close" }
+        ]
+    }
+}

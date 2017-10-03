@@ -1,0 +1,67 @@
+html {
+    font-size: 12pt;
+}
+body, table, input, textarea, select {
+    font-family: -apple-system, sans-serif;
+}
+table, input, textarea, select, button {
+    font-size: 0.88rem;
+}
+html { color: #7e5465; }
+h1, h2, h3, h4, h5, h6 { color: #653d4d; }
+
+body {
+    display: flex;
+    flex-flow: column nowrap;
+    justify-content: center;
+    align-items: center;
+    margin: 0;
+    padding: 0;
+    width: 100vw;
+    height: 100vh;
+    background: white;
+}
+
+article {
+
+}
+
+h1, h2, h3, h4, h5, h6 {
+    margin: 0;
+    padding: 0;
+    font-weight: 700;
+}
+h1 { font-size: 3.00rem; }
+h2 { font-size: 2.50rem; }
+h3 { font-size: 2.08rem; }
+h4 { font-size: 1.73rem; }
+h5 { font-size: 1.44rem; }
+h6 { font-size: 1.20rem; }
+
+button {
+    height: 3em;
+    width: 10rem;
+    background: #d2335c;
+    color: #ffffff;
+    border: none;
+    border-radius: .3rem;
+    font-weight: 500;
+    text-transform: uppercase;
+}
+
+input, textarea, select {
+    box-sizing: border-box;
+    height: 3em;
+    padding: 0 0.8em;
+    background: #eceff4;
+    border: 1px solid #cad3df;
+    border-radius: .42rem;
+}
+
+table {
+    margin: 0 auto;
+}
+
+td {
+    padding: 0 .5rem;
+}
