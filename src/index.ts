@@ -1,6 +1,7 @@
 import * as express from "express";
 import * as url from "url";
 import * as WebSocket from "ws";
+import * as cors from "cors";
 
 const BodyParser = require("body-parser");
 const Multipart = require("connect-multiparty");
@@ -13,6 +14,8 @@ import * as avalon from "./avalon";
 import * as autopilot from "./autopilot";
 
 const app = express();
+
+app.use(cors());
 
 app.use(BodyParser.json());
 app.use(BodyParser.urlencoded({ extended: true }));
@@ -93,6 +96,10 @@ function sendGame(res: express.Response, id: avalon.GameId) {
     res.json([]);
   }
 }
+
+app.post("/", (req, res) => {
+  res.json({ "test": 5 });
+});
 
 app.get("/games/:id", (req, res) => {
   console.log(`GET /games/${req.params["id"]}`);
